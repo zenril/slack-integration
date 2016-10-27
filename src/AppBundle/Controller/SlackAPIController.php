@@ -25,7 +25,8 @@ class SlackAPIController extends FOSRestController
        $request->getContent();
        $data = $request->request->all();
        
-        
+       var_dump($data);
+       
         return   $data;    
     }
 
