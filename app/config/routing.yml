@@ -4,5 +4,4 @@ app:
 
 slack_integrations:
     type: rest
-host: aaron-m.co.nz
     resource: "@AppBundle/Resources/config/integrations.yml"
