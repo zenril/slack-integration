@@ -7,11 +7,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 // Post Route Definition
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\FOSRestController;
 
 use AppBundle\Entity\Person;
 use AppBundle\Entity\PointHistory;
 
-class SlackAPIController extends Controller
+class SlackAPIController extends FOSRestController
 {
    
    /**
@@ -26,4 +28,16 @@ class SlackAPIController extends Controller
         
         return   $data;    
     }
+
+
+    /**
+    * POST Route annotation.
+    * @Get("/scores")
+    */
+    public function getScoreAction(Request $request)
+    {
+        return array("a");
+    }
+
+
 }
