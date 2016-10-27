@@ -2,8 +2,7 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-
 slack_integrations:
     type: rest
     host:   localhost
-    resource: "@AppBundle/Resources/config/slack_integrations.yml"
+    resource: "@AppBundle/Resources/config/integrations.yml"

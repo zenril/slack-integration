@@ -1,5 +1,5 @@
-slack_api:
-    type: rest
+slack_integrations_api:
     prefix: /api
+    type: rest
     resource: AppBundle\Controller\SlackAPIController
     
