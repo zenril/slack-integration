@@ -4,5 +4,4 @@ app:
 
 slack_integrations:
     type: rest
-    host:   localhost
     resource: "@AppBundle/Resources/config/integrations.yml"
