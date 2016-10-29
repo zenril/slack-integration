@@ -95,19 +95,24 @@ class SlackHelper
         });
 
 
-        $plist[] = new SingleParam('/score', 'amount', "|\+{0,1}(\-{0,1}\d+)|", function($param, $matches){
+        $plist[] = new SingleParam('/score', 'amount', "|\+{0,1}(\-{0,1}\d+)|", function($param, $matches) use (&$response) {
 
             
             $point = intval($matches[1]);
-            
-            $pointHistory = new PointHistory();
-            $pointHistory->setScore($point);
-            $pointHistory->setSubmitter($this->sumbitter);
-            $pointHistory->setDomain($this->domain);
-            $pointHistory->setType("level");
-            $this->em->persist($pointHistory);
+            if($point > -11 && $point < 11){
+                $pointHistory = new PointHistory();
+                $pointHistory->setScore($point);
+                $pointHistory->setSubmitter($this->sumbitter);
+                $pointHistory->setDomain($this->domain);
+                $pointHistory->setType("level");
+                $this->em->persist($pointHistory);
+                return $pointHistory;
+            }
 
-            return $pointHistory;//$person;
+            $response["text"] = "Can only change points by max 10 at a time";
+            return [];
+
+            //$person;
         });
 
 
