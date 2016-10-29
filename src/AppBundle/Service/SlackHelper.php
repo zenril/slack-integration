@@ -23,7 +23,7 @@ class SlackHelper
     public $sumbitter;
 
     public function __construct($container, $body) {
-        $this->body = (object)$body;
+        $this->body = $body;
 
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
