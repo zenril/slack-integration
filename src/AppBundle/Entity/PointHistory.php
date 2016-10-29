@@ -190,7 +190,7 @@ class PointHistory
     {      
         $this->people[] = $person;
 
-        if($person->getPointHistory() === null || !$person->getPointHistory()->contains($this)){
+        if($person->getPointHistory() === null || ! in_array($this,$person->getPointHistory()) ){
             $person->setPointHistory($this);
         }
         return   $this;
