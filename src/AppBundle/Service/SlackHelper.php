@@ -168,7 +168,7 @@ class SlackHelper
                     
                     if( preg_match($p->getRegex(), $item, $matches) === 1 ){
                         $r = $p->trigger($p, $matches);
-                        if(!!$r || !empty($r)){
+                        if($r && !empty($r)){
                             $ret[$p->getName()][] = $r;
                         }
                     }
