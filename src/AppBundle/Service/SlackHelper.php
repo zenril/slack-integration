@@ -23,7 +23,7 @@ class SlackHelper
     public $sumbitter;
 
     public function __construct($container, $body) {
-        $this->body = $body;
+        $this->body = (object)$body;
 
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
@@ -31,6 +31,7 @@ class SlackHelper
         $this->domainRepo = $this->em->getRepository('AppBundle:SlackDomain');
         
         $this->domain = $this->domainRepo->findOneByDomain($this->body->team_domain);
+        
         if(!$this->domain){
             $this->domain = new SlackDomain($this->body->team_domain);
             $this->em->persist($this->domain);
@@ -99,6 +100,7 @@ class SlackHelper
             }
 
             $this->em->flush();
+            return $result["people"];
         });
     }
 
@@ -116,10 +118,6 @@ class SlackHelper
                 for ($i=0; $i < count( $splitmessage); $i++) { 
                     $item =  $splitmessage[$i];
                     
-           // $nextItem = $splitmessage[$i + 1];
-             
-                
-                    
                     if( preg_match($p->getRegex(), $item, $matches) === 1 ){
                         $ret[$p->getName()][] = $p->trigger($p, $matches);
                     }
@@ -129,6 +127,6 @@ class SlackHelper
 
         }
 
-        $callback($ret);
+        return $callback($ret);
     }
 }
