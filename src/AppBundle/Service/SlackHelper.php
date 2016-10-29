@@ -69,7 +69,12 @@ class SlackHelper
     public function parseLevels(){
 
         $plist = array();
-        
+        $response = array(
+            "text" => "Some Scores have changed", 
+            "response_type" => "in_channel",
+            "attachments" => array()
+        ); 
+
         $plist[] = new SingleParam('/score', 'people', "|@([^ @]*)|", function($param, $matches){
 
             $person = $this->personRepo->findOneBy(array('domain' => $this->domain, 'name' =>$matches[1] ));
@@ -99,7 +104,8 @@ class SlackHelper
         });
 
 
-        $this->parseParams($plist, function($result){
+        $this->parseParams($plist, function($result) use (&$response) {
+           
             foreach ($result["amount"] as $key => $amount) {
                 foreach ($result["people"] as $key => $person) {
                     if($person === $this->sumbitter){
@@ -110,9 +116,19 @@ class SlackHelper
                 }
             }
 
+            foreach ($result["people"] as $key => $person) {
+                $response["attachments"][] = array(
+                    "text" => $person->getName() . " is now on:". $person->getScore()
+                );
+            }
+
+            
+
             $this->em->flush();
-            return $result["people"];
+            return $response;
         });
+
+        return $response;
     }
 
 

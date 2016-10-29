@@ -29,14 +29,7 @@ class SlackAPIController extends FOSRestController
         $data = $request->request->all();
 
         $sh = new SlackHelper($this->container, $data); 
-        $people = $sh->parseLevels();
-        return array(
-            "text" => "asdasdasdads", 
-            "response_type" => "in_channel",
-            "attachments" => array(
-                array("text" => "Partly cloudy today and tomorrow")
-            )
-        );    
+        return    $sh->parseLevels();
     }
 
     /**
