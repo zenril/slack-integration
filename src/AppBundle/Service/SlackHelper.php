@@ -35,16 +35,16 @@ class SlackHelper
         if(!$this->domain){
             $this->domain = new SlackDomain($this->body->team_domain);
             $this->em->persist($this->domain);
-            $this->em->flush();            
+                     
         }
 
         $this->sumbitter = $this->personRepo->findOneBy(array('domain' => $this->domain, 'name' => $this->body->user_name ));
         if(!$this->sumbitter){
             $this->sumbitter = new Person($this->body->user_name);
             $this->sumbitter->setDomain($this->domain);
-            $this->em->persist($this->sumbitter);       
+            $this->em->persist($this->sumbitter);
         }
-
+        $this->em->flush();
         $this->pointHistoryRepo = $this->em->getRepository('AppBundle:PointHistory');        
     }
 
