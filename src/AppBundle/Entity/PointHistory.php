@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PointHistory
  *
  * @ORM\Table(name="point_history")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PointHistoryRepository")
  */
 class PointHistory
@@ -36,9 +37,27 @@ class PointHistory
     private $score;
 
     /**
-    * @ORM\ManyToOne(targetEntity="Person", inversedBy="pointHistory")
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
+    * @ORM\ManyToMany(targetEntity="Person", inversedBy="pointHistory")
+    * @ORM\JoinTable(name="people_history")
     */
-    private $person;
+    private $People;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="SlackDomain", inversedBy="pointHistory")
+    */
+    private $domain;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Person", inversedBy="mySubmissions")
+    */
+    private $submitter;
 
 
     /**
@@ -75,6 +94,35 @@ class PointHistory
         return $this->created;
     }
 
+
+
+        /**
+     * Set domain
+     *
+     * @param string $domain
+     *
+     * @return SlackDomain
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get domain
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+
+
+
     /**
      * Set score
      *
@@ -98,5 +146,53 @@ class PointHistory
     {
         return $this->score;
     }
+
+
+    /**
+     * Get pointHistory
+     * @return array PointHistory
+     */
+    public function getPeople()
+    {
+        return $this->People;
+    }
+
+    /**
+     * Set score
+     *
+     * @param integer $score
+     *
+     * @return PointHistory
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
+    }
+
+
+    /**
+     * Set setSubmitter
+     *
+     * @param integer $submitter
+     *
+     * @return PointHistory
+     */
+    public function setSubmitter($submitter)
+    {
+        $this->submitter = $submitter;
+    }
+
+    
+
+    /**
+    * @ORM\PrePersist
+    */
+    public function prePersist() {
+        if( empty($this->created) ) {
+            $this->setCreated(new \DateTime());
+        }
+    }
+    
+    
 }
 

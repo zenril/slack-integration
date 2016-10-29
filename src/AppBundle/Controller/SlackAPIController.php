@@ -12,6 +12,9 @@ use FOS\RestBundle\Controller\FOSRestController;
 
 use AppBundle\Entity\Person;
 use AppBundle\Entity\PointHistory;
+use AppBundle\Entity\SingleParam;
+use AppBundle\Entity\DoubleParam;
+use AppBundle\Service\SlackHelper;
 
 class SlackAPIController extends FOSRestController
 {
@@ -22,12 +25,24 @@ class SlackAPIController extends FOSRestController
     */
     public function postScoreAction(Request $request)
     {
-       $request->getContent();
-       $data = $request->request->all();
-       
-       var_dump($data);
-       
+        $request->getContent();
+        $data = $request->request->all();
+
+        $sh = new SlackHelper($this->container, $data); 
+        $people = $sh->parseLevels();
         return   $data;    
+    }
+
+    /**
+    * POST Route annotation.
+    * @Get("/scores")
+    */
+    public function getPersonalImage(Request $request)
+    {
+
+        // header ( 'Content-Type: image/jpeg' );
+        // $image = imagecreatefromjpeg("../Resources/public/images/test.jpg");
+        // imagejpeg($image);
     }
 
 
@@ -37,7 +52,12 @@ class SlackAPIController extends FOSRestController
     */
     public function getScoreAction(Request $request)
     {
-        return array("a");
+
+        $req = json_decode('{"token":"1Ixd1kzqNyzJf18wnm7pwimL","team_id":"T04UG2LA8","team_domain":"thehauntedrules","channel_id":"C09ND1TPS","channel_name":"test","user_id":"U04UHM2QJ","user_name":"eh-eh-ron-bot","command":"\/score","text":"@slackbot @eh-eh-ron-bot +5","response_url":"https:\/\/hooks.slack.com\/commands\/T04UG2LA8\/97867659921\/lYk6MTAYCBViZMiWwQbVBmoa"}');
+        $sh = new SlackHelper($this->container, $req); 
+        $people = $sh->parseLevels();
+
+        return "yay";
     }
 
 

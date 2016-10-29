@@ -12,6 +12,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Person
 {
+
+
+    public function __construct( $name, $description = "")
+    {
+        $this->name = $name;
+        $this->description = $description;
+        $this->score = 0;
+    }
+
+
+
     /**
      * @var int
      *
@@ -24,7 +35,7 @@ class Person
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
@@ -43,9 +54,22 @@ class Person
     private $score;
 
     /**
-     * @ORM\OneToMany(targetEntity="PointHistory", mappedBy="person")
-     */
+    * @ORM\ManyToMany(targetEntity="PointHistory", mappedBy="People")
+    */
     private $pointHistory;
+    
+
+    /**
+    * @ORM\ManyToOne(targetEntity="SlackDomain", inversedBy="people")
+    */
+    private $domain;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="PointHistory", mappedBy="submitter")
+     */
+    private $mySubmissions;
+
 
 
     /**
@@ -82,6 +106,46 @@ class Person
         return $this->name;
     }
 
+    
+    /**
+     * Set score
+     *
+     * @param string $scorename
+     *
+     * @return Person
+     */
+    public function setScore($score)
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+        
+    /**
+     * Set score
+     *
+     * @param string $scorename
+     *
+     * @return Person
+     */
+    public function addScore($score)
+    {
+        $this->score += $score;
+
+        return $this;
+    }
+
+    /**
+     * Get score
+     *
+     * @return string
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
     /**
      * Set description
      *
@@ -115,5 +179,47 @@ class Person
     {
         return $this->pointHistory;
     }
+
+
+    /**
+     * Get pointHistory
+     * @return array PointHistory
+     */
+    public function setPointHistory($ph)
+    {
+        return $this->pointHistory[] = $ph;
+    }
+
+    /**
+     * Get pointHistory
+     * @return array PointHistory
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+
+    /**
+     * Get pointHistory
+     * @return array PointHistory
+     */
+    public function getMySubmissions()
+    {
+        return $this->mySubmissions;
+    }
+
+    /**
+     * Set score
+     *
+     * @param integer $score
+     *
+     * @return PointHistory
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
+    }
+
 }
 
