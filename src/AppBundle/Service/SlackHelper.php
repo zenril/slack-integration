@@ -77,8 +77,11 @@ class SlackHelper
         ); 
 
         $plist[] = new SingleParam('/score', 'list', "|^list$|", function($param, $matches){
-
-            return $this->personRepo->findByDomain( $this->domain );
+            $people = $this->personRepo->findByDomain( $this->domain );
+            if(count($people) > 0){
+                return $people;
+            }
+            return null;
             
         });
 
