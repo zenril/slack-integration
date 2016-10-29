@@ -76,6 +76,12 @@ class SlackHelper
             "attachments" => array()
         ); 
 
+        $plist[] = new SingleParam('/score', 'list', "|^list$|", function($param, $matches){
+
+            return $this->personRepo->findBy( array('domain' => $this->domain ));
+            
+        });
+
         $plist[] = new SingleParam('/score', 'people', "|@([^ @]*)|", function($param, $matches){
 
             $person = $this->personRepo->findOneBy(array('domain' => $this->domain, 'name' =>$matches[1] ));
@@ -105,21 +111,29 @@ class SlackHelper
         });
 
 
-        $this->parseParams($plist, function($result) use (&$response) {
-           
-            foreach ($result["amount"] as $key => $amount) {
-                foreach ($result["people"] as $key => $person) {
-                    if($person === $this->sumbitter){
-                        continue;
+        $this->parseParams($plist, function($result) use (&$response) { 
+           $keys = array_keys($result);
+            if( in_array("amount", $keys) && !in_array("list", $keys) ){
+                foreach ($result["amount"] as $key => $amount) {
+                    foreach ($result["people"] as $key => $person) {
+                        if($person === $this->sumbitter){
+                            continue;
+                        }
+                    $person->addScore($amount->getScore());
+                    $person->setPointHistory($amount);
                     }
-                   $person->addScore($amount->getScore());
-                   $person->setPointHistory($amount);
                 }
             }
 
-            foreach ($result["people"] as $key => $person) {
+            $key = "people";
+            if(in_array("list", $keys) ){
+                $key = "list";
+                $response["text"] = "All the points!";
+            }
+
+            foreach ($result[$key] as $key => $person) {
                 $response["attachments"][] = array(
-                    "text" => $person->getName() . " is now on:". $person->getScore()
+                    "text" => $person->getName() . " is on : ". $person->getScore()." points"
                 );
             }
 
