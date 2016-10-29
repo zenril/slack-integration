@@ -34,7 +34,7 @@ class SlackAPIController extends FOSRestController
             "text" => "asdasdasdads", 
             "response_type" => "in_channel",
             "attachments" => array(
-                "text" => "Partly cloudy today and tomorrow"
+                array("text" => "Partly cloudy today and tomorrow")
             )
         );    
     }
