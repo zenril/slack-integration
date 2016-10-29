@@ -131,9 +131,9 @@ class SlackHelper
                 }
            }
 
-            if( isset($result["list"])) {
+            if( isset($result["list"]) ) {
                 $response["text"] = "All the points!";
-                foreach ($result["list"] as $key => $person) {
+                foreach ($result["list"][0] as $key => $person) {
                     $response["attachments"][] = array(
                         "text" => $person->getName() . " is on : ". $person->getScore()." points"
                     );
@@ -162,7 +162,10 @@ class SlackHelper
                     $item =  $splitmessage[$i];
                     
                     if( preg_match($p->getRegex(), $item, $matches) === 1 ){
-                        $ret[$p->getName()][] = $p->trigger($p, $matches);
+                        $r = $p->trigger($p, $matches);
+                        if(!!$r || !empty($r)){
+                            $ret[$p->getName()][] = $r;
+                        }
                     }
                 }
                 
