@@ -54,7 +54,7 @@ class Person
     private $score;
 
     /**
-    * @ORM\ManyToMany(targetEntity="PointHistory", mappedBy="People")
+    * @ORM\ManyToMany(targetEntity="PointHistory", mappedBy="people")
     */
     private $pointHistory;
     
@@ -186,8 +186,12 @@ class Person
      * @return array PointHistory
      */
     public function setPointHistory($ph)
-    {
-        return $this->pointHistory[] = $ph;
+    {   
+        $this->pointHistory[] = $ph;
+        if($ph->getReferencedPeople() === null || !$ph->getReferencedPeople()->contains($this)){
+            $ph->setReferencedPeople($this);
+        }
+        return;
     }
 
     /**

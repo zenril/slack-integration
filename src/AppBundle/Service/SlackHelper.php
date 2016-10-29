@@ -21,6 +21,7 @@ class SlackHelper
 
     public $domain;
     public $sumbitter;
+    public $last;
 
     public function __construct($container, $body) {
         $this->body = (object)$body;
@@ -28,6 +29,7 @@ class SlackHelper
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
         $this->personRepo = $this->em->getRepository('AppBundle:Person');
+        $this->pointHistoryRepo = $this->em->getRepository('AppBundle:PointHistory');  
         $this->domainRepo = $this->em->getRepository('AppBundle:SlackDomain');
         
         $this->domain = $this->domainRepo->findOneByDomain($this->body->team_domain);
@@ -44,8 +46,16 @@ class SlackHelper
             $this->sumbitter->setDomain($this->domain);
             $this->em->persist($this->sumbitter);
         }
+
+        $this->last = $this->pointHistoryRepo->findOneBy(
+            array('submitter'=>$this->sumbitter),
+            array('created' => 'DESC')
+        );
+
+        $this->sumbitter = $this->personRepo->findOneBy(array('domain' => $this->domain, 'name' => $this->body->user_name ));
+
         $this->em->flush();
-        $this->pointHistoryRepo = $this->em->getRepository('AppBundle:PointHistory');        
+              
     }
 
     //  array(
@@ -82,6 +92,7 @@ class SlackHelper
             $pointHistory->setScore($point);
             $pointHistory->setSubmitter($this->sumbitter);
             $pointHistory->setDomain($this->domain);
+            $pointHistory->setType("level");
             $this->em->persist($pointHistory);
 
             return $pointHistory;//$person;

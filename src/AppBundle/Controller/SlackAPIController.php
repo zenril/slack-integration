@@ -30,7 +30,7 @@ class SlackAPIController extends FOSRestController
 
         $sh = new SlackHelper($this->container, $data); 
         $people = $sh->parseLevels();
-        return   $data;    
+        return "yay";    
     }
 
     /**

@@ -47,7 +47,7 @@ class PointHistory
     * @ORM\ManyToMany(targetEntity="Person", inversedBy="pointHistory")
     * @ORM\JoinTable(name="people_history")
     */
-    private $People;
+    private $people;
 
     /**
     * @ORM\ManyToOne(targetEntity="SlackDomain", inversedBy="pointHistory")
@@ -180,6 +180,25 @@ class PointHistory
     public function setSubmitter($submitter)
     {
         $this->submitter = $submitter;
+    }
+
+    /**
+     * Get pointHistory
+     * @return array PointHistory
+     */
+    public function setReferencedPeople($person)
+    {      
+        $this->people[] = $person;
+
+        if($person->getPointHistory() === null || !$person->getPointHistory()->contains($this)){
+            $person->setPointHistory($this);
+        }
+        return   $this;
+    }
+
+    public function getReferencedPeople()
+    {      
+        return   $this->people;
     }
 
     
