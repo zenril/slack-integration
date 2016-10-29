@@ -37,7 +37,7 @@ class SlackHelper
         if(!$this->domain){
             $this->domain = new SlackDomain($this->body->team_domain);
             $this->em->persist($this->domain);
-                     
+             $this->em->flush();             
         }
 
         $this->sumbitter = $this->personRepo->findOneBy(array('domain' => $this->domain, 'name' => $this->body->user_name ));
@@ -45,6 +45,7 @@ class SlackHelper
             $this->sumbitter = new Person($this->body->user_name);
             $this->sumbitter->setDomain($this->domain);
             $this->em->persist($this->sumbitter);
+             $this->em->flush();
         }
 
         $this->last = $this->pointHistoryRepo->findOneBy(
@@ -54,7 +55,7 @@ class SlackHelper
 
         $this->sumbitter = $this->personRepo->findOneBy(array('domain' => $this->domain, 'name' => $this->body->user_name ));
 
-        $this->em->flush();
+       
               
     }
 
