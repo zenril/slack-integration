@@ -174,7 +174,7 @@ class SlackHelper
 
             if( isset($result["help"]) ) {
                 $response["text"] = "Heres some hints";
-                $response["attachments"] = $result["help"];
+                $response["attachments"] = $result["help"][0];
             }        
 
             $this->em->flush();
