@@ -24,7 +24,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/rest-bundle": "^2.1",
         "dzunke/slack-bundle": "^1.4",
-        "jms/serializer-bundle": "^1.1"
+        "jms/serializer-bundle": "^1.1",
+        "eightpoints/guzzle-bundle": "^4.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
