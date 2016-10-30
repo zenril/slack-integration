@@ -15,6 +15,7 @@ use AppBundle\Entity\PointHistory;
 use AppBundle\Entity\SingleParam;
 use AppBundle\Entity\DoubleParam;
 use AppBundle\Service\SlackHelper;
+use AppBundle\Service\ImageHelper;
 
 class SlackAPIController extends FOSRestController
 {
@@ -33,19 +34,23 @@ class SlackAPIController extends FOSRestController
     }
 
     /**
-    * POST Route annotation.
-    * @Get("/scores")
+    * Get Route annotation.
+    * @Get("/image")
     */
-    public function getPersonalImage(Request $request)
+    public function getImageabcAction(Request $request)
     {
 
-        // header ( 'Content-Type: image/jpeg' );
-        // $image = imagecreatefromjpeg("../Resources/public/images/test.jpg");
-        // imagejpeg($image);
+        header ( 'Content-Type: image/png' );
+        $image = imagecreatefrompng(__DIR__ . "/../Resources/public/images/base.png");
+        ImageHelper::imagehue($image, 120);
+        imagesavealpha($image,true);
+        imagepng($image);
+        
+
     }
 
 
-    /**
+    /** 
     * POST Route annotation.
     * @Get("/scores")
     */
