@@ -71,13 +71,27 @@ class SlackHelper
 
         $plist = array();
         $response = array(
-            "text" => "Some Scores have changed", 
+            "text" => "", 
             "response_type" => "in_channel",
             "attachments" => array()
         ); 
 
+        
+        $plist[] = new SingleParam('/score', 'help', "|^help$|", function($param, $matches){
+            
+           
+            return array(
+               array( "text" => "/score @persons_name +1"),
+                array( "text" => "/score list"),
+                array( "text" => "/score help")
+            );
+            
+        });
+
+
         $plist[] = new SingleParam('/score', 'list', "|^list$|", function($param, $matches){
-            $people = $this->personRepo->findByDomain( $this->domain );
+            
+            $people = $this->personRepo->findByDomain( $this->domain );        
             if(count($people) > 0){
                 return $people;
             }
@@ -103,6 +117,15 @@ class SlackHelper
             
             $point = intval($matches[1]);
             if($point > -11 && $point < 11){
+
+                if($point > 0){
+                    $response["text"] = "What a good people!";
+                }
+
+                if($point < 0){
+                    $response["text"] = "What a bad people!";
+                }
+                
                 $pointHistory = new PointHistory();
                 $pointHistory->setScore($point);
                 $pointHistory->setSubmitter($this->sumbitter);
@@ -120,7 +143,8 @@ class SlackHelper
 
 
         $this->parseParams($plist, function($result) use (&$response) { 
-           $keys = array_keys($result);
+
+      
            if( isset($result["amount"]) && isset($result["people"])){
                 foreach ($result["amount"] as $key => $amount) {
                     foreach ($result["people"] as $key => $person) {
@@ -146,7 +170,12 @@ class SlackHelper
                         "text" => $person->getName() . " is on : ". $person->getScore()." points"
                     );
                 }
-            }                  
+            }            
+
+            if( isset($result["help"]) ) {
+                $response["text"] = "Heres some hints";
+                $response["attachments"] = $result["help"];
+            }        
 
             $this->em->flush();
             return $response;
@@ -162,7 +191,7 @@ class SlackHelper
         
         foreach ($plist as $key => $p) {
             if(!isset($ret[$p->getName()])){
-                $ret[$p->getName()] = array();
+                //$ret[$p->getName()] = array();
             }
             if($p instanceof SingleParam){
             
@@ -171,6 +200,7 @@ class SlackHelper
                     
                     if( preg_match($p->getRegex(), $item, $matches) === 1 ){
                         $r = $p->trigger($p, $matches);
+                        
                         if($r && !empty($r)){
                             $ret[$p->getName()][] = $r;
                         }

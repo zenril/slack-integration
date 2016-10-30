@@ -188,7 +188,7 @@ class Person
     public function setPointHistory($ph)
     {   
         $this->pointHistory[] = $ph;
-        if($ph->getReferencedPeople() === null || !in_array($this,$ph->getReferencedPeople())){
+        if(!is_array($ph->getReferencedPeople()) || !in_array($this,$ph->getReferencedPeople())){
             $ph->setReferencedPeople($this);
         }
         return;
