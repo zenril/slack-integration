@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 // Post Route Definition
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -15,6 +16,7 @@ use AppBundle\Entity\PointHistory;
 use AppBundle\Entity\SingleParam;
 use AppBundle\Entity\DoubleParam;
 use AppBundle\Service\SlackHelper;
+use AppBundle\Service\ImageHelper;
 
 class SlackAPIController extends FOSRestController
 {
@@ -33,19 +35,30 @@ class SlackAPIController extends FOSRestController
     }
 
     /**
-    * POST Route annotation.
-    * @Get("/scores")
+    * Get Route annotation.
+    * @Get("/prof/{width}x{height}/{text}")
     */
-    public function getPersonalImage(Request $request)
+    public function getImageAction(Request $request, $width = 120, $height = 120, $text = "a")
     {
+        
+     
+        $image = imagecreate ( $width , $height );
+    //    / 
+        ImageHelper::triangles($image, $text);
+        imagesavealpha($image,true);
+        
 
-        // header ( 'Content-Type: image/jpeg' );
-        // $image = imagecreatefromjpeg("../Resources/public/images/test.jpg");
-        // imagejpeg($image);
+       
+      //  imagepng($image);
+        ob_start(); 
+        imagepng($image);
+        $str = ob_get_clean();
+        return new Response($str, 200, array('Content-Type' => 'image/png'));
+
     }
 
 
-    /**
+    /** 
     * POST Route annotation.
     * @Get("/scores")
     */
@@ -57,6 +70,19 @@ class SlackAPIController extends FOSRestController
         $people = $sh->parseLevels();
 
         return $people;
+    }
+
+
+    /** 
+    * POST Route annotation.
+    * @Get("/test")
+    */
+    public function gettestAction(Request $request)
+    {
+
+  
+
+        return array(20,50) == array(50,20);
     }
 
 
