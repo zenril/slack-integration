@@ -94,4 +94,45 @@ class ImageHelper
             return array($r, $g, $B);
         }
 
+
+        public static function triangles(&$image, $text){
+            $width = imagesx($image);
+            $height = imagesy($image);
+            $smaller_size = ($height > $width? $width : $height);
+
+            $level = $text;
+            
+            $font_size = $smaller_size;
+
+            $font =  __DIR__ . "/../Resources/public/fonts/BreeSerif-Regular.ttf";
+
+            $bbox = imagettfbbox($font_size, 0, $font, $level);
+            $fontheight = abs($bbox[5]);
+            
+            $fontwidth = abs($bbox[2]);
+
+            while(true){
+                $bbox = imagettfbbox($font_size, 0, $font, $level);
+                $fontheight = abs($bbox[5]);
+                $fontwidth = abs($bbox[2]);
+
+                if($fontwidth < $width * 0.70 && $fontheight < $height * 0.60){
+                    break;
+                }
+
+                $font_size = $font_size - 10;
+            }
+
+            $background_color = imagecolorallocate($image, 0, 0, 0);
+            $text_color = imagecolorallocate($image, 255, 23, 2);
+            
+
+
+            $bbox = imagettfbbox(10, 45, $font, 'Powered by PHP ' . phpversion());
+            
+            imagettftext($image, $font_size, 0, ($width / 2) - ($fontwidth / 2), ($height / 2) + ($fontheight / 2), $text_color,$font, $level);
+            
+            //imagestring($image, ($height > $width? $width : $height) , 50,50,  "15", $text_color);
+        }
+
 }
