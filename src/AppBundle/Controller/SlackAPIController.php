@@ -36,20 +36,41 @@ class SlackAPIController extends FOSRestController
 
     /**
     * Get Route annotation.
+    * 
+    * 
     * @Get("/prof/{width}x{height}/{text}")
     */
-    public function getImageAction(Request $request, $width = 120, $height = 120, $text = "a")
-    {
-        
+    public function getImageAction(
+    Request $request, 
+    $width = 120, 
+    $height = 120,
+    $text = "a"
+    )
+    {  
+
+        $colors = array(
+            "bg" => array(255 ,255,255),
+            "fg" => array(0,0,0)
+        );
+
+        $font = "BreeSerif-Regular";
+        if($request->get("font")){
+            $font = $request->get("font");
+        }
+
+        if($request->get("bg")){
+            $rgb1 = explode(",", $request->get("bg"));
+            $colors["bg"] = array(intval($rgb1[0]) % 256 ,intval($rgb1[1]) % 256,intval($rgb1[2]) % 256);
+        }
+
+        if($request->get("fg")){
+            $rgb1 = explode(",", $request->get("fg"));
+            $colors["fg"] = array(intval($rgb1[0]) % 256 ,intval($rgb1[1]) % 256,intval($rgb1[2]) % 256);
+        }
      
         $image = imagecreate ( $width , $height );
-    //    / 
-        ImageHelper::triangles($image, $text);
+        ImageHelper::triangles($image, $text, $colors, $font);
         imagesavealpha($image,true);
-        
-
-       
-      //  imagepng($image);
         ob_start(); 
         imagepng($image);
         $str = ob_get_clean();

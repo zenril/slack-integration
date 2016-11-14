@@ -1,0 +1,23 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AppBundle:Fonts:addFont{% endblock %}
+
+{% block body %}
+
+
+
+    <ul>
+    {% for font in fonts %}
+        <li data-font='{{ font.fileName }}'  style='height:100%;display:block;'>
+            <div class='lazyload'>
+          
+            <img class="lazy" data-src="{{ url('homepage') }}prof/600x100/{{font.fontName}}?font={{ font.fontName }}&bg=237,20,61&fg=50,50,50" />
+      
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+    <script>
+        $('.lazy').Lazy();
+    </script>
+{% endblock %}

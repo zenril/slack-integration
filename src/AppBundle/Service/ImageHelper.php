@@ -95,7 +95,7 @@ class ImageHelper
         }
 
 
-        public static function triangles(&$image, $text){
+        public static function triangles(&$image, $text, $color, $fontName){
             $width = imagesx($image);
             $height = imagesy($image);
             $smaller_size = ($height > $width? $width : $height);
@@ -104,8 +104,9 @@ class ImageHelper
             
             $font_size = $smaller_size;
 
-            $font =  __DIR__ . "/../Resources/public/fonts/BreeSerif-Regular.ttf";
 
+            $font =  __DIR__ . "/../Resources/public/fonts/" . $fontName .".ttf";
+            
             $bbox = imagettfbbox($font_size, 0, $font, $level);
             $fontheight = abs($bbox[5]);
             
@@ -116,15 +117,15 @@ class ImageHelper
                 $fontheight = abs($bbox[5]);
                 $fontwidth = abs($bbox[2]);
 
-                if($fontwidth < $width * 0.70 && $fontheight < $height * 0.60){
+                if($fontwidth < $width * 0.85 && $fontheight < $height * 0.85){
                     break;
                 }
 
                 $font_size = $font_size - 10;
             }
 
-            $background_color = imagecolorallocate($image, 0, 0, 0);
-            $text_color = imagecolorallocate($image, 255, 23, 2);
+            $background_color = imagecolorallocate($image, $color["bg"][0], $color["bg"][1], $color["bg"][2]);
+            $text_color = imagecolorallocate($image, $color["fg"][0], $color["fg"][1], $color["fg"][2]);
             
 
 
