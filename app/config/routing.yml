@@ -1,7 +1,14 @@
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
-
 slack_integrations:
     type: rest
     resource: "@AppBundle/Resources/config/integrations.yml"
+
+font_app:
+    resource: "@AppBundle/Controller"
+    type:     annotation
+
+catch_all:
+    path: /asdasd/{catch_all}
+    defaults:
+        _controller: AppBundle:Default:index
+    requirements:
+        catch_all: ".*"

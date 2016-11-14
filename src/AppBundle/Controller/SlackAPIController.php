@@ -53,22 +53,23 @@ class SlackAPIController extends FOSRestController
             "fg" => array(0,0,0)
         );
 
-        // var_dump($request->get("bg"));
-        // die();
+        $font = "BreeSerif-Regular";
+        if($request->get("font")){
+            $font = $request->get("font");
+        }
 
         if($request->get("bg")){
-            $rgb1 = explode("-", $request->get("bg"));
+            $rgb1 = explode(",", $request->get("bg"));
             $colors["bg"] = array(intval($rgb1[0]) % 256 ,intval($rgb1[1]) % 256,intval($rgb1[2]) % 256);
         }
 
         if($request->get("fg")){
-            $rgb1 = explode("-", $request->get("fg"));
+            $rgb1 = explode(",", $request->get("fg"));
             $colors["fg"] = array(intval($rgb1[0]) % 256 ,intval($rgb1[1]) % 256,intval($rgb1[2]) % 256);
         }
-
      
         $image = imagecreate ( $width , $height );
-        ImageHelper::triangles($image, $text, $colors);
+        ImageHelper::triangles($image, $text, $colors, $font);
         imagesavealpha($image,true);
         ob_start(); 
         imagepng($image);
