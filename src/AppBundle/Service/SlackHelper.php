@@ -67,76 +67,6 @@ class SlackHelper
 
     }
 
-        public function parseLevels(){
-
-        $plist = array();
-        $response = array(
-            "text" => "", 
-            "response_type" => "in_channel",
-            "attachments" => array()
-        );  
-        
-
-        $plist[] = new SingleParam('/card', 'text', "|text:()|", function($param, $matches) use (&$response) {
-           return intval($matches[1]);
-        });
-
-        $plist[] = new SingleParam('/card', 'bg', "|fg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", function($param, $matches) use (&$response) {
-           return intval($matches[1]);
-        });
-
-        $plist[] = new SingleParam('/card', 'fg', "|fg:(\d{0,3},\d{0,3},\d{0,3}|", function($param, $matches) use (&$response) {
-           return intval($matches[1]);
-        });
-
-
-
-        $this->parseParams($plist, function($result) use (&$response) { 
-
-      
-           if( isset($result["amount"]) && isset($result["people"])){
-                foreach ($result["amount"] as $key => $amount) {
-                    foreach ($result["people"] as $key => $person) {
-                        if($person === $this->sumbitter){
-                            continue;
-                        }
-                        $person->addScore($amount->getScore());
-                        $person->setPointHistory($amount);
-                    }
-                }
-
-                foreach ($result["people"] as $key => $person) {
-                    $response["attachments"][] = array(
-                        "text" => $person->getName() . " is on : ". $person->getScore()." points"
-                    );
-                }
-           }
-
-            if( isset($result["list"]) ) {
-                $response["text"] = "All the points!";
-                foreach ($result["list"][0] as $key => $person) {
-                    $response["attachments"][] = array(
-                        "text" => $person->getName() . " is on : ". $person->getScore()." points"
-                    );
-                }
-            }            
-
-            if( isset($result["help"]) ) {
-                $response["text"] = "Heres some hints";
-                $response["attachments"] = $result["help"][0];
-            }        
-
-            $this->em->flush();
-            return $response;
-        });
-
-        return $response;
-    }
-
-
-
-
-
     public function parseLevels(){
 
         $plist = array();
@@ -148,8 +78,7 @@ class SlackHelper
 
         
         $plist[] = new SingleParam('/score', 'help', "|^help$|", function($param, $matches){
-            
-           
+
             return array(
                array( "text" => "/score @persons_name +1"),
                 array( "text" => "/score list"),
