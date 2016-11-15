@@ -47,29 +47,24 @@ class MultiParam extends SingleParam
     public function parseSlackParams($slack_response){
         self::parse($slack_response, array($this->getRegex()));
     }
-
-$card = new MultiParam("/card", array(
-    array("text","|^\"([^;]*)\";|", true),
-    array("background","|bg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
-    array("foreground","|fg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
-    array("font","|font:([^ ]*)|",false),
-    array("config","|use:([^ ]*)|",false)
-),function($parem, $matches){
     
-}, true);
-
     public static function parse($slack_response, $multiParams = array()){
         foreach ($multiParams as $paramKey => $param) {
             
             if($slack_response['command'] == $param->getCommand() ){
                 $continue = true;
-                foreach ($param->regex as $key => $value) {
+                foreach ( $param->regex as $key => $value ) {
                     preg_match_all($value[1], $slack_response["text"], $out, PREG_SET_ORDER);
-                    if($value[2] == )
-                    $param->addResult($value[0], $out);
+                    if($value[2] == true && count($out) > 0){
+                        $param->addResult($value[0], $out);
+                    } else {
+                        $continue = false;
+                        continue;
+                    }
                 }
-
-                $param->trigger($param, $param->getResults());
+                if($continue){
+                    $param->trigger($param, $param->getResults());
+                }
             }
         }       
     }
