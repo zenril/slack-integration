@@ -120,7 +120,7 @@ class SlackAPIController extends FOSRestController
 
 
              if(isset($matches["text"])){
-                 $url .= $matches["text"][0][1];
+                 $url .= urlencode($matches["text"][0][1]);
              }
 
              $data = array();
@@ -145,7 +145,7 @@ class SlackAPIController extends FOSRestController
                  "unfurl_media" => true,
                  "unfurl_links" => true,
                  "response_type" => "in_channel",
-                 "text" => "<". $url ."|$url>"
+                 "text" => "<". $url ."|card>"
              );
 
 
