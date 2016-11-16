@@ -100,7 +100,8 @@ class SlackAPIController extends FOSRestController
     */
     public function postCardAction(Request $request)
     {
-
+        var_dump($request->request->all());
+        die();
          $card = new MultiParam("/card", array(
              array("text","|^([^;]*);|", true),
              array("background","|bg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
