@@ -12,13 +12,11 @@ class MultiParam extends SingleParam
     
     public function __construct( $command, $regex, $callback, $run = false)
     {
-        $this->command = $command;
-        $this->regex = $regex;
-        $this->callback = $callback;
-        
-        $this->type = "multi";
+        $this->setCommand($command);
+        $this->setRegex($regex);
+        $this->setCallback($callback);
+        $this->setType("multi");
         $this->results = array();
-        
     }
 
     public function setKey($key)
@@ -45,21 +43,26 @@ class MultiParam extends SingleParam
     }
 
     public function parseSlackParams($slack_response){
-        self::parse($slack_response, array($this->getRegex()));
+        
+        self::parse($slack_response, array($this));
     }
     
-    public static function parse($slack_response, $multiParams = array()){
+    public static function parse($slack_response, $multiParams){ 
+        
+      
+
         foreach ($multiParams as $paramKey => $param) {
-            
+           
             if($slack_response['command'] == $param->getCommand() ){
+                
                 $continue = true;
-                foreach ( $param->regex as $key => $value ) {
+                foreach ( $param->getRegex() as $key => $value ) {
                     preg_match_all($value[1], $slack_response["text"], $out, PREG_SET_ORDER);
-                    if($value[2] == true && count($out) > 0){
-                        $param->addResult($value[0], $out);
-                    } else {
+                    if($value[2] == true && count($out) == 0){
                         $continue = false;
                         continue;
+                    } else {                        
+                        $param->addResult($value[0], $out);
                     }
                 }
                 if($continue){

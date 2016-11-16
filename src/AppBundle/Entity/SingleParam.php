@@ -73,10 +73,9 @@ class SingleParam
         return $this->command;
     }
 
-    public function setCallback($command)
+    public function setCallback($callback)
     {
-        $this->command = $callback;
-
+        $this->callback = $callback;
         return $this;
     }
 

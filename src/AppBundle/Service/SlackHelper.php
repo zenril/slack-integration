@@ -4,7 +4,7 @@ namespace AppBundle\Service;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\PointHistory;
 use AppBundle\Entity\SingleParam;
-use AppBundle\Entity\DoubleParam;
+use AppBundle\Entity\MultiParam;
 use AppBundle\Entity\SlackDomain;
 
 

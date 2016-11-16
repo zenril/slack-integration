@@ -14,7 +14,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use AppBundle\Entity\Person;
 use AppBundle\Entity\PointHistory;
 use AppBundle\Entity\SingleParam;
-use AppBundle\Entity\DoubleParam;
+use AppBundle\Entity\MultiParam;
 use AppBundle\Service\SlackHelper;
 use AppBundle\Service\ImageHelper;
 
@@ -96,24 +96,54 @@ class SlackAPIController extends FOSRestController
 
     /** 
     * POST Route annotation.
-    * @Get("/card")
+    * @Post("/card")
     */
     public function postCardAction(Request $request)
     {
 
-        $card = new MultiParam("/card", array(
-            array("text","|^\"([^;]*)\";|", true),
-            array("background","|bg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
-            array("foreground","|fg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
-            array("font","|font:([^ ]*)|",false),
-            array("config","|use:([^ ]*)|",false)
-        ),function($parem, $matches){
-            
-        }, true);
+        // $card = new MultiParam("/card", array(
+        //     array("text","|^([^;]*);|", true),
+        //     array("background","|bg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
+        //     array("foreground","|fg:((\d{0,3}),(\d{0,3}),(\d{0,3}))|", false),
+        //     array("font","|font:([^ ]*)|",false),
+        //     array("config","|use:([^ ]*)|",false)
+        // ),function($param, $matches){
 
 
 
-        return $people;
+        // }, true);
+        
+        // $card->parseSlackParams($request->request->all());
+
+        return json_decode('{
+    "attachments": [
+        {
+            "fallback": "Required plain-text summary of the attachment.",
+            "color": "#36a64f",
+            "pretext": "Optional text that appears above the attachment block",
+            "author_name": "Bobby Tables",
+            "author_link": "http://flickr.com/bobby/",
+            "author_icon": "http://aaron-m.mea/api/prof/400x400/AM",
+            "title": "Slack API Documentation",
+            "title_link": "https://api.slack.com/",
+            "text": "Optional text that appears within the attachment",
+            "fields": [
+                {
+                    "title": "Priority",
+                    "value": "High",
+                    "short": false
+                }
+            ],
+            "image_url": "http://aaron-m.mea/api/prof/400x400/AM",
+            "thumb_url": "http://aaron-m.mea/api/prof/400x400/AM",
+            "footer": "Slack API",
+            "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
+            "ts": 123456789
+        }
+    ]
+}', true);
+
+        return "a";
     }
 
     
