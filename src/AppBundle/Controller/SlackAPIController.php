@@ -110,7 +110,7 @@ class SlackAPIController extends FOSRestController
              array("config","|use:([^ ]*)|",false)
          ),function($param, $matches){
 
-             var_dump($matches);
+             return $matches;
             //   array(
             //      /*"response_type" => "in_channel",*/
             //      "text" => 
@@ -118,7 +118,7 @@ class SlackAPIController extends FOSRestController
 
 
          }, true);
-         return $card->parseSlackParams($request->request->all());
+         return var_dump($card->parseSlackParams($request->request->all()));
     }
 
     
