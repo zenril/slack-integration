@@ -123,7 +123,7 @@ class SlackAPIController extends FOSRestController
             "pretext": "Optional text that appears above the attachment block",
             "author_name": "Bobby Tables",
             "author_link": "http://flickr.com/bobby/",
-            "author_icon": "http://aaron-m.mea/api/prof/400x400/AM",
+            "author_icon": "http://aaron-m.co.nz/api/prof/400x400/AM",
             "title": "Slack API Documentation",
             "title_link": "https://api.slack.com/",
             "text": "Optional text that appears within the attachment",
@@ -134,8 +134,8 @@ class SlackAPIController extends FOSRestController
                     "short": false
                 }
             ],
-            "image_url": "http://aaron-m.mea/api/prof/400x400/AM",
-            "thumb_url": "http://aaron-m.mea/api/prof/400x400/AM",
+            "image_url": "http://aaron-m.co.nz/api/prof/400x400/AM",
+            "thumb_url": "http://aaron-m.co.nz/api/prof/400x400/AM",
             "footer": "Slack API",
             "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
             "ts": 123456789
