@@ -118,7 +118,8 @@ class SlackAPIController extends FOSRestController
 
 
          }, true);
-         return var_dump($card->parseSlackParams($request->request->all()));
+         var_dump($card->parseSlackParams($request->request->all()));
+         return "a10";
     }
 
     

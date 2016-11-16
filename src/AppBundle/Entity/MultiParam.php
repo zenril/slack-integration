@@ -67,9 +67,9 @@ class MultiParam extends SingleParam
                 }
                 if($continue){
                     $ret = $param->trigger($param, $param->getResults());
-                    if(count($multiParams) == 1){
+                    //if(count($multiParams) == 1){
                         return $ret;
-                    }                    
+                    //}                    
                 }
             }
         }       
