@@ -137,11 +137,15 @@ class SlackAPIController extends FOSRestController
                  $data["font"] = $matches["font"][0][1];
              }
 
+             
              $url .= "?" . http_build_query($data);
              //return $matches;
              return array(
+                 "image_url" => $url,
+                 "unfurl_media" => true,
+                 "unfurl_links" => true,
                  "response_type" => "in_channel",
-                 "text" => "<img|". $url .">"
+                 "text" => "<". $url ."|img>"
              );
 
 
