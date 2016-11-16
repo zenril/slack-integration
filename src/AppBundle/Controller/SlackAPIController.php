@@ -145,7 +145,7 @@ class SlackAPIController extends FOSRestController
                  "unfurl_media" => true,
                  "unfurl_links" => true,
                  "response_type" => "in_channel",
-                 "text" => "<". $url ."|img>"
+                 "text" => "<". $url ."|$url>"
              );
 
 
