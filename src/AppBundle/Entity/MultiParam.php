@@ -43,8 +43,7 @@ class MultiParam extends SingleParam
     }
 
     public function parseSlackParams($slack_response){
-        
-        self::parse($slack_response, array($this));
+        return self::parse($slack_response, array($this));
     }
     
     public static function parse($slack_response, $multiParams){ 
@@ -58,18 +57,18 @@ class MultiParam extends SingleParam
                 $continue = true;
                 foreach ( $param->getRegex() as $key => $value ) {
                     preg_match_all($value[1], $slack_response["text"], $out, PREG_SET_ORDER);
-                    // if($value[2] == true && count($out) == 0){
-                    //     $continue = false;
-                    //     continue;
-                    // } else {                        
+                    if($value[2] == true && count($out) == 0){
+                        $continue = false;
+                        continue;
+                    } else if(count($out) > 0){            
                         $param->addResult($value[0], $out);
-                    // }
+                    }
                 }
                 if($continue){
                     $ret = $param->trigger($param, $param->getResults());
-                    //if(count($multiParams) == 1){
+                    if(count($multiParams) == 1){
                         return $ret;
-                    //}                    
+                    }                    
                 }
             }
         }       

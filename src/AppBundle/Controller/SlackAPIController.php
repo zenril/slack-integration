@@ -59,12 +59,12 @@ class SlackAPIController extends FOSRestController
         }
 
         if($request->get("bg")){
-            $rgb1 = explode(",", $request->get("bg"));
+            $rgb1 = explode(",", urldecode($request->get("bg")));
             $colors["bg"] = array(intval($rgb1[0]) % 256 ,intval($rgb1[1]) % 256,intval($rgb1[2]) % 256);
         }
 
         if($request->get("fg")){
-            $rgb1 = explode(",", $request->get("fg"));
+            $rgb1 = explode(",", urldecode($request->get("fg")));
             $colors["fg"] = array(intval($rgb1[0]) % 256 ,intval($rgb1[1]) % 256,intval($rgb1[2]) % 256);
         }
      
@@ -110,16 +110,45 @@ class SlackAPIController extends FOSRestController
              array("config","|use:([^ ]*)|",false)
          ),function($param, $matches){
 
-             return $matches;
-            //   array(
-            //      /*"response_type" => "in_channel",*/
-            //      "text" => 
-            //  )
+             $url = "http://aaron-m.co.nz/api/prof/";
+
+             if(isset($matches["size"])){
+                 $url .= $matches["size"][0][1]."/";
+             } else {
+                 $url .= "800x600/";
+             }
+
+
+             if(isset($matches["text"])){
+                 $url .= $matches["text"][0][1];
+             }
+
+             $data = array();
+
+             if(isset($matches["background"])){
+                 $data["bg"] = $matches["background"][0][1];
+             }
+
+             if(isset($matches["foreground"])){
+                 $data["fg"] = $matches["foreground"][0][1];
+             }
+
+             if(isset($matches["font"])){
+                 $data["font"] = $matches["font"][0][1];
+             }
+
+             $url .= "?" . http_build_query($data);
+             //return $matches;
+             return array(
+                 "response_type" => "in_channel",
+                 "text" => "<img|". $url .">"
+             );
 
 
          }, true);
-         var_dump($card->parseSlackParams($request->request->all()));
-         return "a10";
+         
+       
+         return  $card->parseSlackParams($request->request->all());
     }
 
     
