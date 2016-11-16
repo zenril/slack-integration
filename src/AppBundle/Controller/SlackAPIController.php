@@ -69,7 +69,7 @@ class SlackAPIController extends FOSRestController
         }
      
         $image = imagecreate ( $width , $height );
-        ImageHelper::triangles($image, $text, $colors, $font);
+        ImageHelper::triangles($image, urldecode($text), $colors, $font);
         imagesavealpha($image,true);
         ob_start(); 
         imagepng($image);
