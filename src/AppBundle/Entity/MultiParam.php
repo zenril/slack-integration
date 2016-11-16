@@ -54,7 +54,7 @@ class MultiParam extends SingleParam
         foreach ($multiParams as $paramKey => $param) {
            
             if($slack_response['command'] == $param->getCommand() ){
-                
+
                 $continue = true;
                 foreach ( $param->getRegex() as $key => $value ) {
                     preg_match_all($value[1], $slack_response["text"], $out, PREG_SET_ORDER);
@@ -66,7 +66,10 @@ class MultiParam extends SingleParam
                     }
                 }
                 if($continue){
-                    $param->trigger($param, $param->getResults());
+                    $ret = $param->trigger($param, $param->getResults());
+                    if(count($multiParams) == 1){
+                        return $ret;
+                    }                    
                 }
             }
         }       
