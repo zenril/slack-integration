@@ -110,7 +110,7 @@ class SlackAPIController extends FOSRestController
              array("config","|use:([^ ]*)|",false)
          ),function($param, $matches){
 
-             $url = "http://aaron-m.co.nz/api/prof/";
+             $url = "http://api.aaron-m.co.nz/api/prof/";
 
              if(isset($matches["size"])){
                  $url .= $matches["size"][0][1]."/";
